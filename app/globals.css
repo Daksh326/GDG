@@ -1,9 +1,12 @@
 :root {
-  --background: #0a0a0a;
-  --foreground: #f5f5f5;
-  --accent: #ff4d4d;
-  --muted: #1a1a1a;
-  --border: #2a2a2a;
+  --background: #080808;
+  --surface: #111111;
+  --surface-hover: #1c1c1c;
+  --border: #222222;
+  --foreground: #f0f0f0;
+  --muted: #777777;
+  --accent: #e8ff47;
+  --accent-fg: #080808;
   --radius: 0.5rem;
 }
 
@@ -19,6 +22,14 @@ html,
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+input,
+button,
+textarea,
+select {
+  font-family: inherit;
 }

@@ -12,15 +12,24 @@ export async function POST(req: NextRequest) {
     const result = await cloudinary.uploader.upload(inputUrl, {
       resource_type: "video",
       eager: [
+        // Step 1: crop to 9:16 portrait
         {
           width: 1080,
           height: 1920,
           crop: "fill",
+          gravity: "center",
+        },
+        // Step 2: add text overlay on top of the cropped video
+        {
+          width: 1080,
+          height: 1920,
+          crop: "fill",
+          gravity: "center",
           overlay: {
             font_family: "Arial",
             font_size: 50,
             font_weight: "bold",
-            text: caption || "Your Reel",
+            text: (caption || "Your Reel").replace(/,/g, "%2C").replace(/\//g, "%2F"),
           },
           color: "white",
           gravity: "south",
@@ -30,9 +39,10 @@ export async function POST(req: NextRequest) {
       eager_async: false,
     });
 
+    // Prefer the last eager transformation (with overlay), fall back to first or original
     const eagerUrl =
-      result.eager && result.eager[0]
-        ? result.eager[0].secure_url
+      result.eager && result.eager.length > 0
+        ? result.eager[result.eager.length - 1].secure_url
         : result.secure_url;
 
     return NextResponse.json({ url: eagerUrl });
